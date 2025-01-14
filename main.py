@@ -1,10 +1,13 @@
 from class_csv import *
 
 menu = ("""
-1. Start      
-2. Write a new text file (will overwrite existing file)
+1. Write a new file      
+2. Append file (will overwrite existing file)
 0. Exit  
 """)
+
+folder = input("folder: ")
+file = input("file: ") + ".csv"
 
 while True:
     print(menu)
@@ -15,21 +18,11 @@ while True:
             break
 
         case 1:
-            folder = input("folder: ")
-            file = input("file: ") + ".csv"
-
             Folder(folder, file).check()
-
-            Initialize(folder, file).initialize()
+            Information(folder, file).write()
 
         case 2:
-            folder = input("folder: ")
-            file = input("file: ") + ".csv"
-            name = input("name: ")
-            title = input("title: ")
-            department = input("department: ")
-            
-            Append(folder, file, name, title, department).append()
+            Information(folder, file).append()
     
         case _:
             print ("pick a valid option")

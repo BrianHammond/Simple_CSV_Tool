@@ -10,7 +10,6 @@
 import csv
 import os
 
-
 class Misc:
     def __init__(self, folder, file):
         self.folder = folder
@@ -23,10 +22,17 @@ class Folder(Misc):
                 print(f"{self.folder} not found, creating folder")
                 os.makedirs(self.folder)
 
-class Initialize(Misc):
-    def initialize(self):
+class Information(Misc):
+    def __init__(self, folder, file):
+        super().__init__(folder, file)
+        self.name = input("Name: ")
+        self.title = input("Title: ")
+        self.department = input("Department: ")
+
+    def write(self):
         employees = [
-            ["Name", "Title", "Department"]
+            ["Name", "Title", "Department"],
+            [self.name, self.title, self.department]
         ]
 
         with open(self.full_path, "w", newline="") as file:
@@ -34,13 +40,6 @@ class Initialize(Misc):
             for row in employees:
                 writer.writerow(row)
             print("csv was created")
-
-class Append(Misc):
-    def __init__(self, folder, file, name, title, department):
-        super().__init__(folder, file)
-        self.name = name
-        self.title = title
-        self.department = department
 
     def append(self):
         data_to_append = [
