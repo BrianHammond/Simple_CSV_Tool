@@ -1,5 +1,4 @@
 from class_csv import *
-import os
 
 menu = ("""
 1. Start      
@@ -19,9 +18,7 @@ while True:
             folder = input("folder: ")
             file = input("file: ") + ".csv"
 
-            if not os.path.isdir(folder):
-                print(f"{folder} not found, creating folder")
-                os.makedirs(folder)
+            Folder(folder, file).check()
 
             Initialize(folder, file).initialize()
 
@@ -31,6 +28,7 @@ while True:
             name = input("name: ")
             title = input("title: ")
             department = input("department: ")
+            
             Append(folder, file, name, title, department).append()
     
         case _:

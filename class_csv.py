@@ -8,12 +8,20 @@
 # nothing special here
 
 import csv
+import os
+
 
 class Misc:
     def __init__(self, folder, file):
         self.folder = folder
         self.file = file
         self.full_path = self.folder + "/" + self.file
+
+class Folder(Misc):
+    def check(self):
+        if not os.path.isdir(self.folder):
+                print(f"{self.folder} not found, creating folder")
+                os.makedirs(self.folder)
 
 class Initialize(Misc):
     def initialize(self):
