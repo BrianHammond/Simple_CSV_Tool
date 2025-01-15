@@ -2,12 +2,13 @@ from class_csv import *
 
 menu = ("""
 1. Write a new file      
-2. Append file (will overwrite existing file)
+2. Append file
+3. Read File
 0. Exit  
 """)
 
-folder = input("folder: ")
-file = input("file: ") + ".csv"
+csv_folder = input("folder: ")
+csv_file = input("file: ") + ".csv"
 
 while True:
     print(menu)
@@ -18,11 +19,14 @@ while True:
             break
 
         case 1:
-            Folder(folder, file).check()
-            Information(folder, file).write()
+            Folder(csv_folder, csv_file).check()
+            Write_Append(csv_folder, csv_file).write()
 
         case 2:
-            Information(folder, file).append()
+            Write_Append(csv_folder, csv_file).append()
+
+        case 3:
+            Read_CSV(csv_folder, csv_file).read()
     
         case _:
             print ("pick a valid option")
