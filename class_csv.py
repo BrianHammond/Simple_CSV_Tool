@@ -8,7 +8,6 @@
 # nothing special here
 
 import csv
-import os
 
 class Misc:
     def __init__(self, csv_folder, csv_file):
@@ -17,9 +16,6 @@ class Misc:
         self.csv_full_path = self.csv_folder + "/" + self.csv_file
 
 class Write_Append(Misc):
-
-    
-
     def __init__(self, csv_folder, csv_file):
         super().__init__(csv_folder, csv_file)
         self.csv_name = input("Name: ")
@@ -57,6 +53,3 @@ class Read_CSV(Misc):
             for line in content: # i want to include the header information on each line with each value
                 print(f"Index = {index_num}, Name = {line[0]}, Title = {line[1]}, Department = {line[2]}")
                 index_num += 1
-                
-
-
