@@ -1,5 +1,5 @@
 from class_csv import *
-
+import os
 menu = ("""
 1. Write a new file      
 2. Append file
@@ -9,6 +9,7 @@ menu = ("""
 
 csv_folder = input("folder: ")
 csv_file = input("file: ") + ".csv"
+csv_full_path = csv_folder +  "/" + csv_file
 
 while True:
     print(menu)
@@ -19,14 +20,19 @@ while True:
             break
 
         case 1:
-            Folder(csv_folder, csv_file).check()
-            Write_Append(csv_folder, csv_file).write()
+            if not os.path.isdir(csv_folder):
+                print(f"{csv_folder} not found, creating folder")
+                os.makedirs(csv_folder)
+                Write_Append(csv_folder, csv_file).write()
 
         case 2:
             Write_Append(csv_folder, csv_file).append()
 
         case 3:
-            Read_CSV(csv_folder, csv_file).read()
+            if not os.path.isfile(csv_full_path):
+                print(f"{csv_full_path} not found, try again")
+            else:
+                Read_CSV(csv_folder, csv_file).read()
     
         case _:
             print ("pick a valid option")

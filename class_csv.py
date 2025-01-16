@@ -16,13 +16,10 @@ class Misc:
         self.csv_file = csv_file
         self.csv_full_path = self.csv_folder + "/" + self.csv_file
 
-class Folder(Misc):
-    def check(self):
-        if not os.path.isdir(self.csv_folder):
-                print(f"{self.csv_folder} not found, creating folder")
-                os.makedirs(self.csv_folder)
-
 class Write_Append(Misc):
+
+    
+
     def __init__(self, csv_folder, csv_file):
         super().__init__(csv_folder, csv_file)
         self.csv_name = input("Name: ")
@@ -31,7 +28,7 @@ class Write_Append(Misc):
 
     def write(self):
         employees = [
-            ["Name", "Title", "Department"],
+            ["Name", "Title", "Department", "Index"],
             [self.csv_name, self.csv_title, self.csv_department]
         ]
 
@@ -52,8 +49,14 @@ class Write_Append(Misc):
 
 class Read_CSV(Misc):
     def read(self):
+       
         with open(self.csv_full_path, "r") as file:
             content = csv.reader(file)
-            for line in content:
-                print(line)
+            next(file) # skips the header
+            index_num = 1
+            for line in content: # i want to include the header information on each line with each value
+                print(f"Index = {index_num}, Name = {line[0]}, Title = {line[1]}, Department = {line[2]}")
+                index_num += 1
+                
+
 
