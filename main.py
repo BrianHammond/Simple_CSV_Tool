@@ -21,8 +21,8 @@ class UI(QMainWindow):
         
         #buttons
         self.newFile_button.clicked.connect(self.create_file) # used to create a new .csv file
-        self.select_button.clicked.connect(self.select) # used to open a .csv file
-        self.submit_button.clicked.connect(self.submit) # used to append to a .csv file
+        self.select_button.clicked.connect(self.select_file) # used to open a .csv file
+        self.submit_button.clicked.connect(self.submit_file) # used to append to a .csv file
 
         #menu bar
         self.about_action.triggered.connect(self.help_about)
@@ -49,17 +49,16 @@ class UI(QMainWindow):
         except FileNotFoundError:
             pass
 
-    def submit(self):
+    def submit_file(self):
         name = self.name_edit.text()
         title = self.title_edit.text()
         department = self.department_edit.text()
 
-        if self.table.rowCount != 0:
-            row = self.table.rowCount()
-            self.table.insertRow(row)
-            self.table.setItem(row, 0, QTableWidgetItem(name))
-            self.table.setItem(row, 1, QTableWidgetItem(title))
-            self.table.setItem(row, 2, QTableWidgetItem(department))
+        row = self.table.rowCount()
+        self.table.insertRow(row)
+        self.table.setItem(row, 0, QTableWidgetItem(name))
+        self.table.setItem(row, 1, QTableWidgetItem(title))
+        self.table.setItem(row, 2, QTableWidgetItem(department))
 
         data_to_append = [
             [name, title, department]
@@ -77,7 +76,7 @@ class UI(QMainWindow):
 
         self.clear_fields()
 
-    def select(self):
+    def select_file(self):
         self.table.setRowCount(0) # clears the table
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
