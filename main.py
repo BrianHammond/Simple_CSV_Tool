@@ -13,6 +13,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
 from PyQt6 import uic
 import csv
+import datetime
 
 class UI(QMainWindow):
     def __init__(self):
@@ -38,7 +39,7 @@ class UI(QMainWindow):
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
         employees = [
-            ["Name", "Title", "Department",]
+            ["Name", "Title", "Department", "Time"]
         ]
 
         try:
@@ -50,18 +51,23 @@ class UI(QMainWindow):
             pass
 
     def submit_file(self):
+        self.time_now = datetime.datetime.now()
+        self.current_date = self.time_now.strftime("%m%d%Y%H%M%S") 
+
         name = self.name_edit.text()
         title = self.title_edit.text()
         department = self.department_edit.text()
+        time = self.current_date
 
         row = self.table.rowCount()
         self.table.insertRow(row)
         self.table.setItem(row, 0, QTableWidgetItem(name))
         self.table.setItem(row, 1, QTableWidgetItem(title))
         self.table.setItem(row, 2, QTableWidgetItem(department))
+        self.table.setItem(row, 3, QTableWidgetItem(time))
 
         data_to_append = [
-            [name, title, department]
+            [name, title, department, time]
         ]
         try:
             with open(self.filename[0], "a", newline="" ) as file:
@@ -91,13 +97,15 @@ class UI(QMainWindow):
                     name = line[0]
                     title = line[1]
                     department = line[2]
+                    time = line[3]
 
                     self.table.insertRow(row)
                     self.table.setItem(row, 0, QTableWidgetItem(name))
                     self.table.setItem(row, 1, QTableWidgetItem(title))
                     self.table.setItem(row, 2, QTableWidgetItem(department))
+                    self.table.setItem(row, 3, QTableWidgetItem(time))
                     
-                    print(f"Index = {row}, Name = {name}, Title = {title}, Department = {department}")
+                    print(f"Name = {name}, Title = {title}, Department = {department}, Time = {time}")
 
                     row += 1
         except FileNotFoundError:
@@ -106,7 +114,7 @@ class UI(QMainWindow):
     def clear_fields(self):
         self.name_edit.clear() 
         self.title_edit.clear() 
-        self.department_edit.clear() 
+        self.department_edit.clear()
 
 # Show/Run app
 if __name__ == "__main__":
