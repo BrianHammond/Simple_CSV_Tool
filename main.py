@@ -39,7 +39,7 @@ class UI(QMainWindow):
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
         employees = [
-            ["Name", "Title", "Department", "Time"]
+            ["Name", "Title", "Department", "Timestamp"]
         ]
 
         try:
@@ -51,23 +51,22 @@ class UI(QMainWindow):
             pass
 
     def submit_file(self):
-        self.time_now = datetime.datetime.now()
-        self.current_date = self.time_now.strftime("%m%d%Y%H%M%S") 
+        self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
 
         name = self.name_edit.text()
         title = self.title_edit.text()
         department = self.department_edit.text()
-        time = self.current_date
+        timestamp = self.current_date
 
         row = self.table.rowCount()
         self.table.insertRow(row)
         self.table.setItem(row, 0, QTableWidgetItem(name))
         self.table.setItem(row, 1, QTableWidgetItem(title))
         self.table.setItem(row, 2, QTableWidgetItem(department))
-        self.table.setItem(row, 3, QTableWidgetItem(time))
+        self.table.setItem(row, 3, QTableWidgetItem(timestamp))
 
         data_to_append = [
-            [name, title, department, time]
+            [name, title, department, timestamp]
         ]
         try:
             with open(self.filename[0], "a", newline="" ) as file:
@@ -97,15 +96,15 @@ class UI(QMainWindow):
                     name = line[0]
                     title = line[1]
                     department = line[2]
-                    time = line[3]
+                    timestamp = line[3]
 
                     self.table.insertRow(row)
                     self.table.setItem(row, 0, QTableWidgetItem(name))
                     self.table.setItem(row, 1, QTableWidgetItem(title))
                     self.table.setItem(row, 2, QTableWidgetItem(department))
-                    self.table.setItem(row, 3, QTableWidgetItem(time))
+                    self.table.setItem(row, 3, QTableWidgetItem(timestamp))
                     
-                    print(f"Name = {name}, Title = {title}, Department = {department}, Time = {time}")
+                    print(f"Name = {name}, Title = {title}, Department = {department}, Time = {timestamp}")
 
                     row += 1
         except FileNotFoundError:

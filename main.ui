@@ -132,7 +132,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Time</string>
+        <string>Timestamp</string>
        </property>
       </column>
      </widget>
