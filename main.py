@@ -34,15 +34,15 @@ class UI(QMainWindow):
 
     def newFile(self):
         self.table.setRowCount(0) # clears the table
-        self.pathname = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
-        self.setWindowTitle(self.pathname[0].split('/')[-1])
+        self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
+        self.setWindowTitle(self.filename[0].split('/')[-1])
 
         employees = [
             ["Name", "Title", "Department",]
         ]
 
         try:
-            with open(self.pathname[0], "w", newline="") as file:
+            with open(self.filename[0], "w", newline="") as file:
                 writer = csv.writer(file)
                 for row in employees:
                     writer.writerow(row)
@@ -65,7 +65,7 @@ class UI(QMainWindow):
             [name, title, department]
         ]
         try:
-            with open(self.pathname[0], "a", newline="" ) as file:
+            with open(self.filename[0], "a", newline="" ) as file:
                 writer = csv.writer(file)
                 writer.writerows(data_to_append)
                 print(f"info saved")
@@ -77,11 +77,11 @@ class UI(QMainWindow):
         self.department_edit.clear() 
 
     def select(self):
-        self.pathname = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
-        self.setWindowTitle(self.pathname[0].split('/')[-1])
+        self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
+        self.setWindowTitle(self.filename[0].split('/')[-1])
 
         try:
-            with open(self.pathname[0], "r") as file:
+            with open(self.filename[0], "r") as file:
                 csvFile = csv.reader(file)
                 next(file) # skips the header
 
