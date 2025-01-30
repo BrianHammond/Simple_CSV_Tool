@@ -1,38 +1,110 @@
-from class_csv import *
-import os
-menu = ("""
-1. Write a new file      
-2. Append file
-3. Read File
-0. Exit  
-""")
+# checks to see if the 'PyQT6' module is installed
+try: 
+    from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
+    from PyQt6 import uic
+except ModuleNotFoundError: # if it's not then it will automatically be installed
+    print("PyQT6 module is not installed")
+    import subprocess
+    required_packages = ['PyQT6']
+    for package in required_packages:
+        subprocess.call(['pip', 'install', package])
 
-csv_folder = input("folder: ")
-csv_file = input("file: ") + ".csv"
-csv_full_path = csv_folder +  "/" + csv_file
+import sys
+from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
+from PyQt6 import uic
+import csv
 
-while True:
-    print(menu)
-    choice = int(input("Enter Choice: "))
+class UI(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("main.ui", self) #load the UI file
+        
+        #buttons
+        self.newFile_button.clicked.connect(self.newFile) # used to create a new .csv file
+        self.select_button.clicked.connect(self.select) # used to open a .csv file
+        self.submit_button.clicked.connect(self.submit) # used to append to a .csv file
 
-    match choice:
-        case 0 :
-            break
+        #menu bar
+        self.about_action.triggered.connect(self.help_about)
+       
+    def help_about(self):
+        self.window = QMainWindow()
+        uic.loadUi("about.ui", self.window) #load the UI file
+        self.window.show()
 
-        case 1:
-            if not os.path.isdir(csv_folder):
-                print(f"{csv_folder} not found, creating folder")
-                os.makedirs(csv_folder)
-                Write_Append(csv_folder, csv_file).write()
+    def newFile(self):
+        self.table.setRowCount(0) # clears the table
+        self.pathname = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
+        self.setWindowTitle(self.pathname[0].split('/')[-1])
 
-        case 2:
-            Write_Append(csv_folder, csv_file).append()
+        employees = [
+            ["Name", "Title", "Department",]
+        ]
 
-        case 3:
-            if not os.path.isfile(csv_full_path):
-                print(f"{csv_full_path} not found, try again")
-            else:
-                Read_CSV(csv_folder, csv_file).read()
-    
-        case _:
-            print ("pick a valid option")
+        try:
+            with open(self.pathname[0], "w", newline="") as file:
+                writer = csv.writer(file)
+                for row in employees:
+                    writer.writerow(row)
+        except FileNotFoundError:
+            pass
+
+    def submit(self):
+        name = self.name_edit.text()
+        title = self.title_edit.text()
+        department = self.department_edit.text()
+
+        if not self.table.rowCount == 0:
+            row = self.table.rowCount()
+            self.table.insertRow(row)
+            self.table.setItem(row, 0, QTableWidgetItem(name))
+            self.table.setItem(row, 1, QTableWidgetItem(title))
+            self.table.setItem(row, 2, QTableWidgetItem(department))
+
+        data_to_append = [
+            [name, title, department]
+        ]
+        try:
+            with open(self.pathname[0], "a", newline="" ) as file:
+                writer = csv.writer(file)
+                writer.writerows(data_to_append)
+                print(f"info saved")
+                file.close()
+        except AttributeError:
+            QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
+        self.name_edit.clear() 
+        self.title_edit.clear() 
+        self.department_edit.clear() 
+
+    def select(self):
+        self.pathname = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
+        self.setWindowTitle(self.pathname[0].split('/')[-1])
+
+        try:
+            with open(self.pathname[0], "r") as file:
+                csvFile = csv.reader(file)
+                next(file) # skips the header
+
+                row = 0
+                for line in csvFile: # i want to include the header information on each line with each value
+                    name = line[0]
+                    title = line[1]
+                    department = line[2]
+
+                    self.table.insertRow(row)
+                    self.table.setItem(row, 0, QTableWidgetItem(name))
+                    self.table.setItem(row, 1, QTableWidgetItem(title))
+                    self.table.setItem(row, 2, QTableWidgetItem(department))
+                    
+                    print(f"Index = {row}, Name = {name}, Title = {title}, Department = {department}")
+
+                    row += 1
+        except FileNotFoundError:
+            pass
+
+# Show/Run app
+if __name__ == "__main__":
+    app = QApplication(sys.argv) # needs to run first
+    UIWindow = UI()
+    UIWindow.show()
+    sys.exit(app.exec())
