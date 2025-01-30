@@ -54,7 +54,7 @@ class UI(QMainWindow):
         title = self.title_edit.text()
         department = self.department_edit.text()
 
-        if not self.table.rowCount == 0:
+        if self.table.rowCount != 0:
             row = self.table.rowCount()
             self.table.insertRow(row)
             self.table.setItem(row, 0, QTableWidgetItem(name))
