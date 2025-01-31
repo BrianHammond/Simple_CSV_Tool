@@ -14,7 +14,6 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidget
 from PyQt6 import uic
 import csv
 import datetime
-from about import About
 
 class UI(QMainWindow):
     def __init__(self):
@@ -27,7 +26,7 @@ class UI(QMainWindow):
         self.submit_button.clicked.connect(self.submit_file) # used to append to a .csv file
 
         #menu bar
-        self.about_action.triggered.connect(About().help_about)
+        self.about_action.triggered.connect(self.about)
 
         # text fields
         self.name = self.name_edit
@@ -114,6 +113,11 @@ class UI(QMainWindow):
             name.clear() 
             title.clear() 
             department.clear()
+
+    def about(self):
+        self.window = QMainWindow()
+        uic.loadUi("about.ui", self.window) #load the UI file
+        self.window.show()
 
 # Show/Run app
 if __name__ == "__main__":
