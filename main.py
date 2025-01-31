@@ -59,11 +59,8 @@ class UI(QMainWindow):
         timestamp = self.current_date
 
         row = self.table.rowCount()
-        self.table.insertRow(row)
-        self.table.setItem(row, 0, QTableWidgetItem(name))
-        self.table.setItem(row, 1, QTableWidgetItem(title))
-        self.table.setItem(row, 2, QTableWidgetItem(department))
-        self.table.setItem(row, 3, QTableWidgetItem(timestamp))
+        
+        self.populate_table(row, name, title, department, timestamp)
 
         data_to_append = [
             [name, title, department, timestamp]
@@ -98,13 +95,7 @@ class UI(QMainWindow):
                     department = line[2]
                     timestamp = line[3]
 
-                    self.table.insertRow(row)
-                    self.table.setItem(row, 0, QTableWidgetItem(name))
-                    self.table.setItem(row, 1, QTableWidgetItem(title))
-                    self.table.setItem(row, 2, QTableWidgetItem(department))
-                    self.table.setItem(row, 3, QTableWidgetItem(timestamp))
-                    
-                    print(f"Name = {name}, Title = {title}, Department = {department}, Time = {timestamp}")
+                    self.populate_table(row, name, title, department, timestamp)
 
                     row += 1
         except FileNotFoundError:
@@ -114,6 +105,13 @@ class UI(QMainWindow):
         self.name_edit.clear() 
         self.title_edit.clear() 
         self.department_edit.clear()
+
+    def populate_table(self, row, name, title, department, timestamp):
+        self.table.insertRow(row)
+        self.table.setItem(row, 0, QTableWidgetItem(name))
+        self.table.setItem(row, 1, QTableWidgetItem(title))
+        self.table.setItem(row, 2, QTableWidgetItem(department))
+        self.table.setItem(row, 3, QTableWidgetItem(timestamp))
 
 # Show/Run app
 if __name__ == "__main__":
