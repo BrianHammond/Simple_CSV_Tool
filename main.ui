@@ -154,6 +154,7 @@
      <string>Help</string>
     </property>
     <addaction name="about_action"/>
+    <addaction name="actionAbout_Qt"/>
    </widget>
    <addaction name="menuHelp"/>
   </widget>
@@ -176,6 +177,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>

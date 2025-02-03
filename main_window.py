@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QFileDialog, QTableWidgetItem, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidgetItem, QMessageBox
 from PyQt6 import uic
 import csv
 import datetime
@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
 
         #menu bar
         self.about_action.triggered.connect(self.about)
+        self.actionAbout_Qt.triggered.connect(self.about_qt)
 
         # text fields
         self.name = self.name_edit
@@ -106,3 +107,6 @@ class MainWindow(QMainWindow):
         self.window = QWidget()
         uic.loadUi("about.ui", self.window) #load the UI file
         self.window.show()
+
+    def about_qt(self):
+        QApplication.aboutQt()
