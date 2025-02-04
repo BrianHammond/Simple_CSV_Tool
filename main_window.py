@@ -58,9 +58,12 @@ class MainWindow(QMainWindow):
             with open(self.filename[0], "a", newline="" ) as file:
                 writer = csv.writer(file)
                 writer.writerows(data_to_append)
-                print(f"info saved")
                 file.close()
         except AttributeError:
+            self.clear_fields(self.name, self.title, self.department)
+            self.table.setRowCount(0) # clears the table
+            QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
+        except FileNotFoundError:
             self.clear_fields(self.name, self.title, self.department)
             self.table.setRowCount(0) # clears the table
             QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
