@@ -19,6 +19,18 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
@@ -146,7 +158,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
