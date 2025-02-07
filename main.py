@@ -1,13 +1,14 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QTableWidgetItem, QMessageBox
-from PyQt6 import uic
 import csv
 import datetime
 import sys
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
+from main_ui import Ui_MainWindow as main_ui
+from about_ui import Ui_MainWindow as about_ui
 
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow, main_ui):
     def __init__(self):
         super().__init__()
-        uic.loadUi("main.ui", self) #load the UI file
+        self.setupUi(self)
         
         #buttons
         self.newFile_button.clicked.connect(self.create_file) # used to create a new .csv file
@@ -108,15 +109,20 @@ class MainWindow(QMainWindow):
             department.clear()
 
     def about(self):
-        self.window = QDialog()
-        uic.loadUi("about.ui", self.window) #load the UI file
-        self.window.show()
+        self.about_window = AboutWindow()
+        self.about_window.show()
 
     def about_qt(self):
         QApplication.aboutQt()
+
+class AboutWindow(QMainWindow, about_ui):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first
     MainWindow = MainWindow()
     MainWindow.show()
     sys.exit(app.exec())
+    
