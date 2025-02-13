@@ -106,18 +106,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.table = QTableWidget(self.centralwidget)
-        if (self.table.columnCount() < 4):
-            self.table.setColumnCount(4)
-        __qtablewidgetitem = QTableWidgetItem()
-        self.table.setHorizontalHeaderItem(0, __qtablewidgetitem)
-        __qtablewidgetitem1 = QTableWidgetItem()
-        self.table.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        __qtablewidgetitem2 = QTableWidgetItem()
-        self.table.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        __qtablewidgetitem3 = QTableWidgetItem()
-        self.table.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         self.table.setObjectName(u"table")
-        self.table.setColumnCount(4)
+        self.table.setColumnCount(0)
         self.table.verticalHeader().setVisible(True)
 
         self.verticalLayout.addWidget(self.table)
@@ -165,14 +155,6 @@ class Ui_MainWindow(object):
         self.line_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"title", None))
         self.line_department.setPlaceholderText(QCoreApplication.translate("MainWindow", u"department", None))
         self.submit_button.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
-        ___qtablewidgetitem = self.table.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Name", None));
-        ___qtablewidgetitem1 = self.table.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Title", None));
-        ___qtablewidgetitem2 = self.table.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Department", None));
-        ___qtablewidgetitem3 = self.table.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Timestamp", None));
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
     # retranslateUi

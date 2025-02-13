@@ -102,6 +102,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             pass
     
     def populate_table(self, row, name, title, department, timestamp):
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
         self.table.insertRow(row)
         self.table.setItem(row, 0, QTableWidgetItem(name))
         self.table.setItem(row, 1, QTableWidgetItem(title))
