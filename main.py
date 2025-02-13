@@ -2,32 +2,32 @@ import csv
 import datetime
 import sys
 import qdarkstyle
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidgetItem, QMessageBox
 from PySide6.QtCore import QSettings
 from main_ui import Ui_MainWindow as main_ui
-from about_window import AboutWindow
+from about_ui import Ui_Form as about_ui
 
-class MainWindow(QMainWindow, main_ui):
+class MainWindow(QMainWindow, main_ui): # used to display the main user interface
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.settings = QSettings('settings.ini', QSettings.IniFormat)
-        self.loadSettings()
+        self.settings_manager = SettingsManager(self)  # Initializes SettingsManager
+        self.settings_manager.load_settings()  # Load settings when the app starts
         
         #buttons
-        self.newFile_button.clicked.connect(self.create_file) # used to create a new .csv file
-        self.select_button.clicked.connect(self.select_file) # used to open a .csv file
+        self.button_new.clicked.connect(self.create_file) # used to create a new .csv file
+        self.button_import.clicked.connect(self.import_file) # used to open a .csv file
         self.submit_button.clicked.connect(self.submit_file) # used to append to a .csv file
 
         #menu bar
-        self.actionDarkMode.toggled.connect(self.dark_mode)
-        self.about_action.triggered.connect(self.about)
-        self.actionAbout_Qt.triggered.connect(self.about_qt)
+        self.action_dark_mode.toggled.connect(self.dark_mode)
+        self.about_action.triggered.connect(self.show_about)
+        self.action_about_qt.triggered.connect(self.about_qt)
 
         # text fields
-        self.name = self.name_edit
-        self.title = self.title_edit
-        self.department = self.department_edit
+        self.name = self.line_name
+        self.title = self.line_title
+        self.department = self.line_department
 
     def create_file(self):
         self.table.setRowCount(0) # clears the table
@@ -77,7 +77,7 @@ class MainWindow(QMainWindow, main_ui):
 
         self.clear_fields(self.name, self.title, self.department)
 
-    def select_file(self):
+    def import_file(self):
         self.clear_fields(self.name, self.title, self.department)
         self.table.setRowCount(0) # clears the table
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
@@ -119,29 +119,46 @@ class MainWindow(QMainWindow, main_ui):
         else:
             self.setStyleSheet('')
 
-    def about(self):
-        self.about_window = AboutWindow()
+    def show_about(self):  # loads the About window
+        self.about_window = AboutWindow(dark_mode=self.action_dark_mode.isChecked())
         self.about_window.show()
 
-    def about_qt(self):
+    def about_qt(self):  # loads the About Qt window
         QApplication.aboutQt()
 
-    def closeEvent(self, event): #settings will save when closing the app
-        self.settings.setValue('window_size', self.size())
-        self.settings.setValue('window_pos', self.pos())
-        self.settings.setValue('dark_mode', self.actionDarkMode.isChecked())
+    def closeEvent(self, event):  # Save settings when closing the app
+        self.settings_manager.save_settings()  # Save settings using the manager
         event.accept()
 
-    def loadSettings(self): #settings will load when opening the app
+class SettingsManager: # used to load and save settings when opening and closing the app
+    def __init__(self, main_window):
+        self.main_window = main_window
+        self.settings = QSettings('settings.ini', QSettings.IniFormat)
+
+    def load_settings(self):
         size = self.settings.value('window_size', None)
         pos = self.settings.value('window_pos', None)
         dark = self.settings.value('dark_mode')
+        
         if size is not None:
-            self.resize(size)
+            self.main_window.resize(size)
         if pos is not None:
-            self.move(pos)
+            self.main_window.move(pos)
         if dark == 'true':
-            self.actionDarkMode.setChecked(True)
+            self.main_window.action_dark_mode.setChecked(True)
+            self.main_window.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
+
+    def save_settings(self):
+        self.settings.setValue('window_size', self.main_window.size())
+        self.settings.setValue('window_pos', self.main_window.pos())
+        self.settings.setValue('dark_mode', self.main_window.action_dark_mode.isChecked())
+
+class AboutWindow(QWidget, about_ui): # Configures the About window
+    def __init__(self, dark_mode=False):
+        super().__init__()
+        self.setupUi(self)
+
+        if dark_mode:
             self.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
 
 if __name__ == "__main__":
