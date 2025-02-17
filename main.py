@@ -32,17 +32,16 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
     def create_file(self):
         self.table.setRowCount(0) # clears the table
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
-        self.setWindowTitle(self.filename[0].split('/')[-1])
 
-        employees = [
-            ["Name", "Title", "Department", "Timestamp"]
-        ]
+        if not self.filename[0]:
+            return  # Do nothing if no file is selected
+        
+        self.setWindowTitle(self.filename[0].split('/')[-1])
 
         try:
             with open(self.filename[0], "w", newline="") as file:
                 writer = csv.writer(file)
-                for row in employees:
-                    writer.writerow(row)
+                writer.writerow(["Name", "Title", "Department", "Timestamp"])  # Directly writing header
         except FileNotFoundError:
             pass
 
@@ -58,14 +57,11 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         
         self.populate_table(row, name, title, department, timestamp)
 
-        data_to_append = [
-            [name, title, department, timestamp]
-        ]
+        data_to_append = [[name, title, department, timestamp]]
         try:
             with open(self.filename[0], "a", newline="" ) as file:
                 writer = csv.writer(file)
                 writer.writerows(data_to_append)
-                file.close()
         except AttributeError:
             self.clear_fields(self.name, self.title, self.department)
             self.table.setRowCount(0) # clears the table
@@ -86,7 +82,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         try:
             with open(self.filename[0], "r") as file:
                 csvFile = csv.reader(file)
-                next(file) # skips the header
+                next(csvFile) # skips the header
 
                 row = 0
                 for line in csvFile: # i want to include the header information on each line with each value
@@ -105,10 +101,12 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
         self.table.insertRow(row)
-        self.table.setItem(row, 0, QTableWidgetItem(name))
-        self.table.setItem(row, 1, QTableWidgetItem(title))
-        self.table.setItem(row, 2, QTableWidgetItem(department))
-        self.table.setItem(row, 3, QTableWidgetItem(timestamp))
+        self.table.setItem(row, 0, QTableWidgetItem('  '+name+'  '))
+        self.table.setItem(row, 1, QTableWidgetItem('  '+title+'  '))
+        self.table.setItem(row, 2, QTableWidgetItem('  '+department+'  '))
+        self.table.setItem(row, 3, QTableWidgetItem('  '+timestamp+'  '))
+        self.table.resizeColumnsToContents()
+        self.table.resizeRowsToContents()
 
     def clear_fields(self, name, title, department):
             name.clear() 
@@ -165,7 +163,7 @@ class AboutWindow(QWidget, about_ui): # Configures the About window
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first
-    MainWindow = MainWindow()
-    MainWindow.show()
+    main_window = MainWindow()
+    main_window.show()
     sys.exit(app.exec())
     
