@@ -19,6 +19,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.button_import.clicked.connect(self.import_file) # used to open a .csv file
         self.button_submit.clicked.connect(self.submit_file) # used to append to a .csv file
         self.button_update.clicked.connect(self.update_file)
+        self.button_delete.clicked.connect(self.delete_row)
 
         #menu bar
         self.action_dark_mode.toggled.connect(self.dark_mode)
@@ -31,9 +32,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.department = self.line_department
 
     def create_file(self):
-        self.table.setRowCount(0) # clears the table
-        self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
+        self.initialize_table()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
 
         if not self.filename[0]:
@@ -121,8 +120,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             QMessageBox.warning(self, "File Not Found", "Please select or create a file first.")
 
     def import_file(self):
-        self.clear_fields(self.name, self.title, self.department)
-        self.table.setRowCount(0) # clears the table
+        self.initialize_table()
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -143,10 +141,41 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
                     row += 1
         except FileNotFoundError:
             pass
-    
-    def populate_table(self, row, name, title, department, timestamp):
+
+    def delete_row(self):
+        current_row = self.table.currentRow()
+        
+        if current_row >= 0:
+            # Remove the row from the table
+            self.table.removeRow(current_row)
+            
+            # Now, we will update the CSV file by removing the corresponding row
+            try:
+                with open(self.filename[0], "r") as file:
+                    csvFile = csv.reader(file)
+                    existing_data = list(csvFile)  # Read all data
+
+                # Remove the row to delete (skip header)
+                updated_data = [row for i, row in enumerate(existing_data) if i != current_row + 1]
+
+                # Write the updated data back to the CSV file
+                with open(self.filename[0], "w", newline="") as file:
+                    writer = csv.writer(file)
+                    writer.writerows(updated_data)
+
+                QMessageBox.information(self, "Delete Successful", "The selected row has been deleted.")
+            
+            except FileNotFoundError:
+                QMessageBox.warning(self, "File Not Found", "Please select or create a file first.")
+        else:
+            QMessageBox.warning(self, "No Row Selected", "Please select a row to delete.")
+
+    def initialize_table(self):
+        self.table.setRowCount(0) # clears the table
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
+
+    def populate_table(self, row, name, title, department, timestamp):
         self.table.insertRow(row)
         self.table.setItem(row, 0, QTableWidgetItem(name))
         self.table.setItem(row, 1, QTableWidgetItem(title))
