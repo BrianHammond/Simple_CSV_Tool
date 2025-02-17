@@ -53,6 +53,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addWidget(self.button_new)
 
+        self.button_update = QPushButton(self.centralwidget)
+        self.button_update.setObjectName(u"button_update")
+
+        self.horizontalLayout_4.addWidget(self.button_update)
+
         self.button_import = QPushButton(self.centralwidget)
         self.button_import.setObjectName(u"button_import")
 
@@ -88,15 +93,15 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.submit_button = QPushButton(self.centralwidget)
-        self.submit_button.setObjectName(u"submit_button")
+        self.button_submit = QPushButton(self.centralwidget)
+        self.button_submit.setObjectName(u"button_submit")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.submit_button.sizePolicy().hasHeightForWidth())
-        self.submit_button.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.button_submit.sizePolicy().hasHeightForWidth())
+        self.button_submit.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_3.addWidget(self.submit_button)
+        self.horizontalLayout_3.addWidget(self.button_submit)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -150,11 +155,12 @@ class Ui_MainWindow(object):
         self.action_about_qt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
         self.action_dark_mode.setText(QCoreApplication.translate("MainWindow", u"Dark Mode", None))
         self.button_new.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
+        self.button_update.setText(QCoreApplication.translate("MainWindow", u"Update File", None))
         self.button_import.setText(QCoreApplication.translate("MainWindow", u"Import File", None))
         self.line_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"name", None))
         self.line_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"title", None))
         self.line_department.setPlaceholderText(QCoreApplication.translate("MainWindow", u"department", None))
-        self.submit_button.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
+        self.button_submit.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
     # retranslateUi

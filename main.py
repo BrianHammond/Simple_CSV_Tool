@@ -17,7 +17,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         #buttons
         self.button_new.clicked.connect(self.create_file) # used to create a new .csv file
         self.button_import.clicked.connect(self.import_file) # used to open a .csv file
-        self.submit_button.clicked.connect(self.submit_file) # used to append to a .csv file
+        self.button_submit.clicked.connect(self.submit_file) # used to append to a .csv file
+        self.button_update.clicked.connect(self.update_file)
 
         #menu bar
         self.action_dark_mode.toggled.connect(self.dark_mode)
@@ -31,6 +32,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
     def create_file(self):
         self.table.setRowCount(0) # clears the table
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
 
         if not self.filename[0]:
@@ -73,6 +76,50 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
         self.clear_fields(self.name, self.title, self.department)
 
+    def update_file(self):
+        # Get the updated values from the table
+        rows = self.table.rowCount()
+        columns = self.table.columnCount()
+
+        # Check if the table has rows and columns
+        if rows == 0 or columns == 0:
+            QMessageBox.warning(self, "Empty Table", "The table is empty. Please add some data first.")
+            return
+
+        # Prepare the updated data
+        updated_data = []
+
+        for row in range(rows):
+            row_data = []
+            for col in range(columns):
+                # Get the new value from the table cell
+                item = self.table.item(row, col)
+                if item is not None:
+                    row_data.append(item.text())  # Append the edited text from the cell
+                else:
+                    row_data.append('')  # If the cell is empty, append an empty string
+            updated_data.append(row_data)
+
+        # Write the updated data back to the CSV file
+        try:
+            with open(self.filename[0], "r") as file:
+                csvFile = csv.reader(file)
+                existing_data = list(csvFile)  # Read all existing data (including header)
+
+            # Replace the data part with the updated data (skip the header row)
+            updated_data_with_header = [existing_data[0]] + updated_data  # Include the header in the updated data
+
+            # Write the updated data back to the CSV file
+            with open(self.filename[0], "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_data_with_header)
+
+            # Optionally, you could update the table immediately after writing to the CSV, but it's already in sync.
+            QMessageBox.information(self, "Update Successful", "The table data has been updated in the CSV file.")
+            
+        except FileNotFoundError:
+            QMessageBox.warning(self, "File Not Found", "Please select or create a file first.")
+
     def import_file(self):
         self.clear_fields(self.name, self.title, self.department)
         self.table.setRowCount(0) # clears the table
@@ -101,10 +148,10 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
         self.table.insertRow(row)
-        self.table.setItem(row, 0, QTableWidgetItem('  '+name+'  '))
-        self.table.setItem(row, 1, QTableWidgetItem('  '+title+'  '))
-        self.table.setItem(row, 2, QTableWidgetItem('  '+department+'  '))
-        self.table.setItem(row, 3, QTableWidgetItem('  '+timestamp+'  '))
+        self.table.setItem(row, 0, QTableWidgetItem(name))
+        self.table.setItem(row, 1, QTableWidgetItem(title))
+        self.table.setItem(row, 2, QTableWidgetItem(department))
+        self.table.setItem(row, 3, QTableWidgetItem(timestamp))
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
 
