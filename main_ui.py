@@ -18,8 +18,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLineEdit,
     QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QStatusBar, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+    QSizePolicy, QStatusBar, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -32,8 +32,8 @@ class Ui_MainWindow(object):
         MainWindow.setWindowIcon(icon)
         self.newFile_action = QAction(MainWindow)
         self.newFile_action.setObjectName(u"newFile_action")
-        self.about_action = QAction(MainWindow)
-        self.about_action.setObjectName(u"about_action")
+        self.action_about = QAction(MainWindow)
+        self.action_about.setObjectName(u"action_about")
         self.open_action = QAction(MainWindow)
         self.open_action.setObjectName(u"open_action")
         self.action_about_qt = QAction(MainWindow)
@@ -41,6 +41,10 @@ class Ui_MainWindow(object):
         self.action_dark_mode = QAction(MainWindow)
         self.action_dark_mode.setObjectName(u"action_dark_mode")
         self.action_dark_mode.setCheckable(True)
+        self.action_new = QAction(MainWindow)
+        self.action_new.setObjectName(u"action_new")
+        self.action_open = QAction(MainWindow)
+        self.action_open.setObjectName(u"action_open")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -73,10 +77,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.button_new = QPushButton(self.centralwidget)
-        self.button_new.setObjectName(u"button_new")
+        self.button_add = QPushButton(self.centralwidget)
+        self.button_add.setObjectName(u"button_add")
 
-        self.horizontalLayout_4.addWidget(self.button_new)
+        self.horizontalLayout_4.addWidget(self.button_add)
 
         self.button_update = QPushButton(self.centralwidget)
         self.button_update.setObjectName(u"button_update")
@@ -88,32 +92,8 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addWidget(self.button_delete)
 
-        self.button_import = QPushButton(self.centralwidget)
-        self.button_import.setObjectName(u"button_import")
-
-        self.horizontalLayout_4.addWidget(self.button_import)
-
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.button_submit = QPushButton(self.centralwidget)
-        self.button_submit.setObjectName(u"button_submit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.button_submit.sizePolicy().hasHeightForWidth())
-        self.button_submit.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout_3.addWidget(self.button_submit)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.table = QTableWidget(self.centralwidget)
         self.table.setObjectName(u"table")
@@ -133,21 +113,24 @@ class Ui_MainWindow(object):
         self.menuHelp.setObjectName(u"menuHelp")
         self.menuSettings = QMenu(self.menuBar)
         self.menuSettings.setObjectName(u"menuSettings")
+        self.menuFile = QMenu(self.menuBar)
+        self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menuBar)
         QWidget.setTabOrder(self.line_name, self.line_title)
         QWidget.setTabOrder(self.line_title, self.line_department)
-        QWidget.setTabOrder(self.line_department, self.button_new)
-        QWidget.setTabOrder(self.button_new, self.button_update)
+        QWidget.setTabOrder(self.line_department, self.button_add)
+        QWidget.setTabOrder(self.button_add, self.button_update)
         QWidget.setTabOrder(self.button_update, self.button_delete)
-        QWidget.setTabOrder(self.button_delete, self.button_import)
-        QWidget.setTabOrder(self.button_import, self.button_submit)
-        QWidget.setTabOrder(self.button_submit, self.table)
+        QWidget.setTabOrder(self.button_delete, self.table)
 
+        self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuSettings.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
-        self.menuHelp.addAction(self.about_action)
+        self.menuHelp.addAction(self.action_about)
         self.menuHelp.addAction(self.action_about_qt)
         self.menuSettings.addAction(self.action_dark_mode)
+        self.menuFile.addAction(self.action_new)
+        self.menuFile.addAction(self.action_open)
 
         self.retranslateUi(MainWindow)
 
@@ -160,22 +143,29 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.newFile_action.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+N", None))
 #endif // QT_CONFIG(shortcut)
-        self.about_action.setText(QCoreApplication.translate("MainWindow", u"About", None))
+        self.action_about.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.open_action.setText(QCoreApplication.translate("MainWindow", u"Open", None))
 #if QT_CONFIG(shortcut)
         self.open_action.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
         self.action_about_qt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
         self.action_dark_mode.setText(QCoreApplication.translate("MainWindow", u"Dark Mode", None))
+        self.action_new.setText(QCoreApplication.translate("MainWindow", u"New", None))
+#if QT_CONFIG(shortcut)
+        self.action_new.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+N", None))
+#endif // QT_CONFIG(shortcut)
+        self.action_open.setText(QCoreApplication.translate("MainWindow", u"Open", None))
+#if QT_CONFIG(shortcut)
+        self.action_open.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
+#endif // QT_CONFIG(shortcut)
         self.line_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"name", None))
         self.line_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"title", None))
         self.line_department.setPlaceholderText(QCoreApplication.translate("MainWindow", u"department", None))
-        self.button_new.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
-        self.button_update.setText(QCoreApplication.translate("MainWindow", u"Update File", None))
+        self.button_add.setText(QCoreApplication.translate("MainWindow", u"Add", None))
+        self.button_update.setText(QCoreApplication.translate("MainWindow", u"Update Info", None))
         self.button_delete.setText(QCoreApplication.translate("MainWindow", u"Delete Row", None))
-        self.button_import.setText(QCoreApplication.translate("MainWindow", u"Import File", None))
-        self.button_submit.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
+        self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi
 

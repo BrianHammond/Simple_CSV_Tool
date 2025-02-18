@@ -15,15 +15,15 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.settings_manager.load_settings()  # Load settings when the app starts
         
         #buttons
-        self.button_new.clicked.connect(self.create_file) # used to create a new .csv file
-        self.button_import.clicked.connect(self.import_file) # used to open a .csv file
-        self.button_submit.clicked.connect(self.submit_file) # used to append to a .csv file
+        self.button_add.clicked.connect(self.submit_file) # used to append to a .csv file
         self.button_update.clicked.connect(self.update_file)
         self.button_delete.clicked.connect(self.delete_row)
 
         #menu bar
+        self.action_new.triggered.connect(self.new_file)
+        self.action_open.triggered.connect(self.open_file)
         self.action_dark_mode.toggled.connect(self.dark_mode)
-        self.about_action.triggered.connect(self.show_about)
+        self.action_about.triggered.connect(self.show_about)
         self.action_about_qt.triggered.connect(self.about_qt)
 
         # text fields
@@ -31,7 +31,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.title = self.line_title
         self.department = self.line_department
 
-    def create_file(self):
+    def new_file(self):
         self.initialize_table()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
 
@@ -119,7 +119,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         except FileNotFoundError:
             QMessageBox.warning(self, "File Not Found", "Please select or create a file first.")
 
-    def import_file(self):
+    def open_file(self):
         self.initialize_table()
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
