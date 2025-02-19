@@ -15,8 +15,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.settings_manager.load_settings()  # Load settings when the app starts
         
         #buttons
-        self.button_add.clicked.connect(self.submit_file) # used to append to a .csv file
-        self.button_update.clicked.connect(self.update_file)
+        self.button_add.clicked.connect(self.add_info)
+        self.button_update.clicked.connect(self.update_info)
         self.button_delete.clicked.connect(self.delete_row)
 
         #menu bar
@@ -47,7 +47,34 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         except FileNotFoundError:
             pass
 
-    def submit_file(self):
+    def open_file(self):
+        self.initialize_table()
+        self.filename = QFileDialog.getOpenFileName(self, 'Open file', '', 'Data File (*.csv)',)
+
+        if not self.filename[0]:
+            return  # Do nothing if no file is selected
+        
+        self.setWindowTitle(self.filename[0].split('/')[-1])
+
+        try:
+            with open(self.filename[0], "r") as file:
+                csvFile = csv.reader(file)
+                next(csvFile) # skips the header
+
+                row = 0
+                for line in csvFile: # i want to include the header information on each line with each value
+                    name = line[0]
+                    title = line[1]
+                    department = line[2]
+                    timestamp = line[3]
+
+                    self.populate_table(row, name, title, department, timestamp)
+
+                    row += 1
+        except FileNotFoundError:
+            pass
+
+    def add_info(self):
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
 
         name = self.name.text()
@@ -75,7 +102,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
         self.clear_fields(self.name, self.title, self.department)
 
-    def update_file(self):
+    def update_info(self):
         # Get the updated values from the table
         rows = self.table.rowCount()
         columns = self.table.columnCount()
@@ -118,29 +145,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             
         except FileNotFoundError:
             QMessageBox.warning(self, "File Not Found", "Please select or create a file first.")
-
-    def open_file(self):
-        self.initialize_table()
-        self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.csv)',)
-        self.setWindowTitle(self.filename[0].split('/')[-1])
-
-        try:
-            with open(self.filename[0], "r") as file:
-                csvFile = csv.reader(file)
-                next(csvFile) # skips the header
-
-                row = 0
-                for line in csvFile: # i want to include the header information on each line with each value
-                    name = line[0]
-                    title = line[1]
-                    department = line[2]
-                    timestamp = line[3]
-
-                    self.populate_table(row, name, title, department, timestamp)
-
-                    row += 1
-        except FileNotFoundError:
-            pass
+        
+        self.table.resizeColumnsToContents()
 
     def delete_row(self):
         current_row = self.table.currentRow()
