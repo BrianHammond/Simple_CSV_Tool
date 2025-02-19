@@ -32,11 +32,13 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.department = self.line_department
 
     def new_file(self):
-        self.initialize_table()
+        self.clear_fields()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.csv)',)
 
         if not self.filename[0]:
             return  # Do nothing if no file is selected
+            
+        self.initialize_table()
         
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -48,11 +50,13 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             pass
 
     def open_file(self):
-        self.initialize_table()
+        self.clear_fields()
         self.filename = QFileDialog.getOpenFileName(self, 'Open file', '', 'Data File (*.csv)',)
 
         if not self.filename[0]:
             return  # Do nothing if no file is selected
+            
+        self.initialize_table()
         
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -100,7 +104,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             self.table.setRowCount(0) # clears the table
             QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
 
-        self.clear_fields(self.name, self.title, self.department)
+        self.clear_fields()
 
     def update_info(self):
         # Get the updated values from the table
@@ -179,7 +183,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
     def initialize_table(self):
         self.table.setRowCount(0) # clears the table
         self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(['name', 'title', 'department', 'timestamp'])
+        self.table.setHorizontalHeaderLabels(['Name', 'Title', 'Department', 'Timestamp'])
 
     def populate_table(self, row, name, title, department, timestamp):
         self.table.insertRow(row)
@@ -190,10 +194,10 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
 
-    def clear_fields(self, name, title, department):
-            name.clear() 
-            title.clear() 
-            department.clear()
+    def clear_fields(self):
+            self.name.clear() 
+            self.title.clear() 
+            self.department.clear()
 
     def dark_mode(self, checked):
         if checked:
